@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Lab 1: import demo",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "lab1",
+            "args": ["import", "data/submissions.jsonl"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+[
+  {
+    "assignment_id": "lab-1",
+    "title": "Учебное задание",
+    "allowed_template_lines": [
+      "print(\"demo\")"
+    ]
+  }
+]

@@ -1,0 +1,8 @@
+{"submission_id": "demo-001", "student_id": "student-demo", "assignment_id": "lab-1", "timestamp": "2026-01-01T09:00:00Z", "text": "Учебный пример.", "code": "print(\"demo\")", "ai_declaration": {"used": false, "details": ""}}
+{broken
+{"submission_id": "demo-001", "student_id": "", "assignment_id": "lab-1", "timestamp": "2026-01-01T09:00:00Z", "text": "Учебный пример.", "code": "print(\"demo\")", "ai_declaration": {"used": false, "details": ""}}
+{"submission_id": "demo-001", "student_id": "student-demo", "assignment_id": "lab-1", "timestamp": "2026-01-01T09:00:00Z", "text": "Учебный пример.", "code": "different", "ai_declaration": {"used": false, "details": ""}}
+{"submission_id": "demo-001", "student_id": "student-demo", "assignment_id": "lab-1", "timestamp": "2026-01-01T09:00:00", "text": "Учебный пример.", "code": "print(\"demo\")", "ai_declaration": {"used": false, "details": ""}}
+{"submission_id": "demo-001", "student_id": "student-demo", "assignment_id": "lab-1", "timestamp": "2026-01-01T09:00:00Z", "text": "Учебный пример.", "code": "print(\"demo\")", "ai_declaration": {"used": false, "details": ""}, "unknown": true}
+{"submission_id": "demo-001", "student_id": "student-demo", "assignment_id": "lab-1", "timestamp": "2026-01-01T09:00:00Z", "text": "Учебный пример.", "code": "print(\"demo\")", "ai_declaration": {"used": false, "details": ""}}
+{"submission_id": "demo-002", "student_id": "student-demo", "assignment_id": "lab-1", "timestamp": "2026-01-01T09:00:00Z", "text": "Вторая версия.", "code": "print(\"demo\")", "ai_declaration": {"used": false, "details": ""}}

@@ -1,0 +1,92 @@
+# ЛР-1 — Приём работ и расширяемые анализаторы
+
+Эталонный проект, траектория Python Core, основной уровень. **Этап А: приём и валидация**. Это не итоговая ЛР-1: анализаторы и расширяемые источники будут добавлены на этапе Б.
+
+## Цель
+
+Принимать версии лабораторных работ, проверять внешний контракт, обнаруживать дубликаты и конфликты. Содержимое `text` и `code` хранится как данные и никогда не исполняется. Рабочее хранилище находится в памяти процесса; HTTP, ORM, базы данных и модель ИИ не используются.
+
+## Быстрый старт (Windows, VS Code)
+
+1. Распакуйте архив в отдельную папку. Откройте папку `lab1-stage-a` через File → Open Folder.
+2. Установите рекомендуемые расширения Python, Pylance, Ruff. Проверьте `py -3.11 --version`.
+3. В терминале PowerShell, из корня проекта:
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+```
+
+В VS Code: Ctrl+Shift+P → Python: Select Interpreter → `.venv\Scripts\python.exe`. Активация окружения не обязательна, поэтому изменять политику PowerShell не нужно. На Linux/macOS используйте `python3.11 -m venv .venv`, затем `.venv/bin/python` вместо пути Windows.
+
+```powershell
+.\.venv\Scripts\python.exe -m lab1 import data/submissions.jsonl
+.\.venv\Scripts\python.exe -m lab1 import data/invalid_submissions.jsonl
+```
+
+Первый импорт: `accepted=2`, `duplicate=1`, `errors=[]`, код завершения 0. Второй: `accepted=2`, `duplicate=1`, пять ошибок строк 2–6, код завершения 1 (ожидаемое поведение). Недоступный файл: сообщение в stderr, код 2. Отчёт JSON выдаётся в stdout при завершённом импорте. Счётчики относятся к текущему файлу, новый запуск CLI создаёт новое хранилище.
+
+## Автотесты и качество
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -v
+.\.venv\Scripts\python.exe -m pytest -q --cov=lab1 --cov-branch --cov-report=term-missing
+.\.venv\Scripts\python.exe -m ruff check .
+.\.venv\Scripts\python.exe -m ruff format --check .
+.\.venv\Scripts\python.exe -m mypy src/
+.\.venv\Scripts\python.exe scripts/verify.py
+.\.venv\Scripts\python.exe scripts/benchmark.py
+```
+
+`verify.py` выполняет четыре проверки, возвращает ненулевой код при любой неудаче и создаёт `docs/verification-local.md` с фактическими результатами и версиями. Полный JUnit/coverage остаётся в `.artifacts/` и не публикуется. После успешной проверки этот Markdown добавляется в коммит вместе с исходниками и тестами. Вкладка Testing в VS Code позволяет запускать отдельные тесты. Минимальное покрытие с ветвлениями — 90%, но оно не заменяет проверку обязательных сценариев.
+
+Если Ruff нашёл проблемы оформления, выполните `python -m ruff check --fix .` и `python -m ruff format .` через выбранный интерпретатор, изучите изменения и заново запустите `verify.py`. Ошибки mypy и тестов исправляются по существу; не выключайте проверки для получения зелёного статуса.
+
+## Модули
+
+| Модуль | Ответственность |
+|---|---|
+| `models` | Неизменяемые модели |
+| `errors` | Ошибки формата, схемы и конфликта |
+| `parser`, `validation` | JSON и единый входной контракт |
+| `hashing` | SHA-256 канонического содержимого |
+| `repository` | Protocol и хранилище в памяти |
+| `intake` | Правила приёма |
+| `importer`, `cli` | Файловый адаптер и интерфейс командной строки |
+
+Сервис принимает `object` через `accept` либо JSON-строку через `accept_json`. Оба пути используют одну схему и возвращают `IntakeResult`. `Submission` — внутренний объект после проверки; `dataclass` сам по себе не обеспечивает runtime-валидацию. Не создавайте доменные объекты из непроверенных внешних данных напрямую.
+
+## Прямой вызов
+
+```python
+from lab1.intake import SubmissionService
+from lab1.repository import InMemorySubmissionRepository
+
+repository = InMemorySubmissionRepository()
+service = SubmissionService(repository)
+record = {
+    "submission_id": "demo-001",
+    "student_id": "student-demo",
+    "assignment_id": "lab-1",
+    "timestamp": "2026-01-01T09:00:00Z",
+    "text": "Учебный пример",
+    "code": "print('demo')",
+    "ai_declaration": {"used": False, "details": ""},
+}
+first = service.accept(record)
+second = service.accept(record)
+assert first.status == "accepted"
+assert second.status == "duplicate"
+assert second.submission is first.submission
+assert len(repository) == 1
+```
+
+## Документация
+
+- [Постановка задач, контракт и критерии приёмки](docs/stage-a-report.md)
+- [Фактическая исходная проверка](docs/verification-initial.md)
+- [Публикация в GitHub после проверок](docs/github-publication.md)
+- [Использование ИИ](AI_USAGE.md)
+
+Все данные в `data/` синтетические. `assignments.json` — подготовленный пример для этапа Б, этап А не проверяет существование `assignment_id` в каталоге. Общая памятка контракта и оригинальные датасеты не приложены к доступному заданию; схема в отчёте является явным проектным соглашением, которое следует сверить с ними перед окончательной сдачей.

@@ -1,0 +1,47 @@
+# Python and development environments
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+.artifacts/
+build/
+dist/
+*.whl
+*.log
+*.xml
+*.sqlite*
+*.db
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+.idea/
+# Local VS Code settings may contain personal paths.
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+# Only the three verified, synthetic datasets belong in Git.
+data/*
+!data/submissions.jsonl
+!data/invalid_submissions.jsonl
+!data/assignments.json
+private/
+secrets/
+credentials/
+*.pem
+*.key
+*.pfx
+*.p12
+*.kdbx
+*.jks
+*.crt
+*.cer
+*.token
+*.zip
