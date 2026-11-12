@@ -7,6 +7,10 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    working-directory: lab1-stage-a
+
 jobs:
   verify:
     runs-on: ubuntu-latest
